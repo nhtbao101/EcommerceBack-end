@@ -7,6 +7,7 @@ const morgan = require("morgan");
 //import
 const authRouter = require("./routers/auth");
 const userRouter = require("./routers/user");
+const categoryRouter = require("./routers/category");
 
 const port = process.env.PORT || 8001;
 //app
@@ -32,6 +33,7 @@ app.use(cookieParser());
 //route
 app.use("/api", authRouter);
 app.use("/api", userRouter);
+app.use("/api", categoryRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);
