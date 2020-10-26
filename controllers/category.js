@@ -57,6 +57,7 @@ exports.remove = (req, res) => {
 };
 
 exports.list = (req, res) => {
+  console.log(req.query);
   Category.find().exec((err, data) => {
     if (err) {
       return res.status(400).json({
