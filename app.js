@@ -8,6 +8,7 @@ const morgan = require("morgan");
 const authRouter = require("./routers/auth");
 const userRouter = require("./routers/user");
 const categoryRouter = require("./routers/category");
+const productRouter = require("./routers/product");
 
 const port = process.env.PORT || 8001;
 //app
@@ -30,10 +31,11 @@ mongoose.connection.on("error", (err) => {
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
-//route
+//route middleware
 app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", categoryRouter);
+app.use("/api", productRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);
