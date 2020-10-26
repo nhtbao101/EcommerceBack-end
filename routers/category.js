@@ -29,13 +29,7 @@ router.delete(
   isAdmin,
   remove
 );
-router.get(
-  "/category/:categoryId/:userId",
-  requestSignin,
-  isAuth,
-  isAdmin,
-  list
-);
+router.get("/categorys", list);
 
 router.param("categoryId", categoryById);
 router.param("userId", userById);
