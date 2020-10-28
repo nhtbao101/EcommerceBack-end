@@ -8,6 +8,7 @@ const {
   remove,
   update,
   list,
+  relatedProduct,
 } = require("../controllers/product");
 const { userById } = require("../controllers/user");
 const { requestSignin, isAdmin, isAuth } = require("../controllers/auth");
@@ -32,6 +33,7 @@ router.put(
 );
 
 router.get("/products", list);
+router.get("/product/related/:productId", relatedProduct);
 
 router.param("userId", userById);
 router.param("productId", producById);
