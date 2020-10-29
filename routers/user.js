@@ -9,8 +9,8 @@ router.get("/secret/:userId", requestSignin, isAuth, isAdmin, (req, res) => {
     user: req.profile,
   });
 });
-// router.get("/user/:userId", read);
-// router.put("/user/:userID", update);
+router.get("/user/:userId", requestSignin, isAuth, read);
+router.put("/user/:userID", requestSignin, isAuth, update);
 
 router.param("userId", userById);
 
