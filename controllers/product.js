@@ -231,3 +231,70 @@ exports.relatedProduct = async (req, res) => {
     });
   }
 };
+
+exports.listCategories = async (req, res) => {
+  try {
+    let products = await Product.distinct("category", {});
+    res.json(products);
+  } catch (error) {
+    return res.status(400).json({
+      error: error,
+    });
+  }
+};
+
+exports.listBySearch = async (req, res) => {
+  try {
+    let sortBy = req.query.sort ? req.query.sort : "asc";
+    let order = req.query.order ? req.query.order : "_id";
+
+    let limit = req.query.limit ? parseInt(req.query.limit) : 50;
+    let skip = parseInt(req.query.skip) || 0;
+    let findArgs = {};
+
+    for (let key in req.body.filters) {
+      if (req.body.filters[key].length > 0) {
+        if (key === "price") {
+          findArgs[key] = {
+            $gte: req.body.filters[key][0],
+            $lte: req.body.filters[key][1],
+          };
+        } else {
+          findArgs[key] = req.body.filters[key];
+        }
+      }
+    }
+    console.log("findArgs", findArgs);
+    let sortFilter = "";
+    if (sortBy == "desc") sortFilter = sortFilter + "-";
+    sortFilter += order;
+    console.log(sortFilter + " sd");
+    let product = await Product.find(findArgs)
+      .select("photo")
+      .populate("category")
+      .sort(sortFilter)
+      .skip(skip)
+      .limit(limit);
+    console.log(product);
+    res.json({
+      size: product.length,
+      product,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error,
+    });
+  }
+};
+
+exports.photoProduct = async (req, res, next) => {
+  try {
+    let pt = await req.product.photo.data;
+    res.set("Content-Type", req.product.photo.contentType);
+    return res.send(pt);
+  } catch (error) {
+    return res.status(400).json({
+      err: errorLoadPhoto,
+    });
+  }
+};
